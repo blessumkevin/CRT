@@ -1,0 +1,23 @@
+*** Settings ***
+Library    QWeb
+Library    QVision
+Library    DataDriver    reader_class=TestDataApi    name=service_now.xlsx
+
+Test Setup       Setup Browser
+Test Teardown    CloseAllBrowsers
+Test Template     Localization example
+
+*** Variables ***
+${close_icon}     //button[@data-dismiss\="modal"]
+
+*** Test Case ***
+Localization example with ${lang}
+    [Tags]        ${lang}
+
+Login
+    [Documentation]      Login to ServiceNow instance with ${lang}
+    [Arguments]          ${lang}    ${username_lbl}    ${password_lbl}    ${btn_login}    ${settings_lbl}
+    Dropdown             language_select              ${lang}
+    VerifyText           ${username_lbl}              # wait until label is translated correctly
+    ClickText            ${btn_login}
+    VerifyText           ${settings_lbl}
